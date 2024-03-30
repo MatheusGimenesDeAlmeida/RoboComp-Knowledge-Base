@@ -3,4 +3,4 @@ Resumo dos aprendizados da matéria Robótica Computacional do terceiro semestre
 - Ferramentas: ROS2; CV2;
 - Professor: Diego Soler
 - Site da Disciplina: https://insper.github.io/robotica-computacional/
-- 
+
