@@ -36,10 +36,10 @@ class Explorador(Node, Odom, Laser): # Mude o nome da classe
         self.cmd_vel_pub = self.create_publisher(Twist, 'cmd_vel', 10)
         ## Coloque aqui os publishers
 
-        self.goal_girar = False
+        self.goal_girar = False # Atributos booleano que servem para controlar o robô
         self.hora_de_sair = False # Atributos booleano que servem para controlar o robô
         self.vamos_embora = False # Atributos booleano que servem para controlar o robô
-        self.goal_andar = False
+        self.goal_andar = False # Atributos booleano que servem para controlar o robô
         self.contador = 0
 
 
@@ -48,17 +48,19 @@ class Explorador(Node, Odom, Laser): # Mude o nome da classe
 
     def girar(self):
         if not self.goal_girar:
-            self.goal_girar = (self.yaw_2pi + np.pi / 2) % (2 * np.pi) # Código para girar 90 graus anti-horário
+            self.goal_girar = (self.yaw_2pi + np.pi / 2) % (2 * np.pi) # Código para definir ângulo alvo como 90 graus anti-horário
     
-        self.twist.angular.z = 0.1
+        self.twist.angular.z = 0.1 # Velocidade
         
-        diferenca_yaw = (self.goal_girar - self.yaw_2pi) % (2 * np.pi)
+        diferenca_yaw = (self.goal_girar - self.yaw_2pi) % (2 * np.pi) # Diferença etre o real e o alvo
+
         print('diferenca_yaw: ', np.degrees(diferenca_yaw))
+
         if diferenca_yaw <= np.radians(2):
-            self.goal_girar = False  
-            self.twist.angular.z = 0.0
-            self.contador += 1
-            self.robot_state = 'andar'
+            self.goal_girar = False  # Cancela o alvo atual, já que eel já foi atingido
+            self.twist.angular.z = 0.0 # Para de girar
+            self.contador += 1 # Identifica que ele já deu o primeiro giro
+            self.robot_state = 'andar' # Define o estado para começar a andar
 
     def girar_horario(self): #Estado inicial do robô, depois ele só gira anti-horário
         if not self.goal_girar: # self.goal_girar tem que ser false (ele começa false)
@@ -81,12 +83,12 @@ class Explorador(Node, Odom, Laser): # Mude o nome da classe
         print(self.contador)
         print(np.min(self.front)) # Printa o valor mínimo da lista de distancia frontal do robô
 
-        if self.vamos_embora == True and (np.max(self.left) == np.inf and np.max(self.right) == np.inf) and self.counter == 6:
+        if self.vamos_embora == True and (np.max(self.left) == np.inf and np.max(self.right) == np.inf) and self.contador == 6: # Verifica se o carrinho já está fora 
             self.twist.linear.x = 0.0
             self.robot_stat = 'stop'
-        elif np.min(self.front) < 0.5 and self.contador < 5:
+        elif np.min(self.front) < 0.5 and self.contador < 5: # Curvas antes da final
             self.robot_state = 'girar'
-        elif np.min(self.right) == np.inf and self.contador == 5:
+        elif np.min(self.right) == np.inf and self.contador == 5: # Verifica se está na hora de sair 
             self.vamos_embora = True
             self.robot_state = 'girar_horario'
 
