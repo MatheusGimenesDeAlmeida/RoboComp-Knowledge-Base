@@ -22,7 +22,8 @@ setup(
         'console_scripts': [
             'quadrado = Exercises.quadrado:main',
             'indeciso = Exercises.indeciso:main',
-            'limpador = Exercises.limpador:main'
+            'limpador = Exercises.limpador:main',
+            'q1_simulado = Exercises.explorador:main'
         ],
     },
 )
