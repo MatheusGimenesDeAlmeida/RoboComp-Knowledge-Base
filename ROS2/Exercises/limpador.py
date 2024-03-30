@@ -28,7 +28,7 @@ class Limpador(Node, Laser, Odom):
         self.vel_pub = self.create_publisher(Twist, 'cmd_vel', 10)
 
     def forward(self):
-        self.twist.linear.x = 0.2
+        self.twist.linear.x = 0.4
         self.twist.angular.z = 0.0
         
         frontDistance = min(self.front)
@@ -40,7 +40,7 @@ class Limpador(Node, Laser, Odom):
            
     def turn(self):
         self.twist.linear.x = 0.0
-        self.twist.angular.z = 0.5
+        self.twist.angular.z = 0.3
         print(self.yaw_2pi, self.goal_yaw)
         if abs(self.yaw_2pi - self.goal_yaw) < 0.05:
             self.robot_state = 'forward'
